@@ -2,9 +2,9 @@
 <?php
     //$host = 'mysql.metropolia.fi';
     $host = 'mysql.metropolia.fi';
-    $dbname = 'lilyg'; // your username
-    $user = 'lilyg'; // your username
-    $pass = 'mahletab'; // your database password
+    $dbname = 'myusername'; // your username
+    $user = 'myusername'; // your username
+    $pass = 'password'; // your database password
     
     try {
             $DBH = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
