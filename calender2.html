@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 2</title>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="jquery.timepicker.css">
+<link rel="stylesheet" href="fullcalendar.min.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script src="jquery.timepicker.min.js"></script>
+<script src="jquery.validate.min.js"></script>
+<script src="jquery.form.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+<script src="fullcalendar.min.js"></script>
+<style>
+body {
+	width: 48em;
+	margin: auto;
+	background: #eee;
+}
+#plink {
+	display:block;
+	background-color:#06F;
+	border: #69C thin solid;
+	padding: 3px;
+	text-align:center;
+	text-decoration:none;
+	color:#CCC;
+}
+#part {
+	border: #69C thin solid;
+	padding: 3px;
+	margin-top:0;
+}
+
+.error{
+	font-size: 0.7em;
+	color: red;
+	display:block;
+}
+#add form label.label{
+	width: 22%;
+	text-align: right;
+	display: inline-block;
+	vertical-align: top;
+}
+#add form label.error {
+	clear: both;
+	margin-left: 23%;
+	text-align: left;
+}
+#add form input,
+#add form textarea {
+	vertical-align: top;
+	display: inline-block;
+}
+#add form input[type="submit"] {
+	margin-left: 23%
+}
+</style>
+</head>
+
+<body>
+<div id="tabs">
+  <ul>
+    <!-- these are the tab headers -->
+    <li><a href="#add">add event</a></li>
+    <!-- TODO: this header should open the 'add' tab -->
+    <li><a href="get.php">view events</a></li>
+    <!-- TODO: this header should open 'get.php' tab (see 'content via ajax' in the documentation)-->
+  </ul>
+  <div id="add">
+	<!--div id="output"></div-->
+    <form action="save.php" method="post" name="addForm">
+      <p> 
+		<label class="label">name:</label>
+        <input placeholder="event name" type="text" name="name" required>
+        <br/><br/>
+        <label class="label">place/description:</label>
+        <textarea placeholder="place and/or description" rows="4" cols="30" name="desc"></textarea>
+		<br/>
+      </p>
+      <a href="javascript:void(0);" id="plink">participant:</a>
+      <div id="participant"> 
+		<br/>
+		<label class="label">email:</label>
+        <input placeholder="test@test.com" type="email" id="email" name="email" required>
+        <br/><br/>
+        <label class="label">cell:</label>
+        <input placeholder="0123456789" type="text" id="cell" name="cell" required>
+        <br/><br/>
+      </div>
+      <p> 
+		<label class="label">date:</label>
+        <input placeholder="Date" type="text" name="date" required>
+        <br/><br/>
+        <label class="label">time:</label>
+        <input placeholder="12:00" type="text" name="time" id="time" required >
+		<br/>
+      </p>
+      <input type="submit" value="Save">
+    </form>
+  </div>
+</div>
+<script>
+//$(function () {
+$(document).ready(function() { 
+	var options = { 
+        //target:        '#output',   // target element(s) to be updated with server response 
+        success:	showResponse,  // post-submit callback 
+		dataType:	'json'
+    }; 
+	$('#participant').hide();
+	
+	$('#plink').click(function() {
+		$('#participant').toggle();
+	});
+	
+	$('input[name=date]').datepicker();
+	
+	// TODO: set <input name="time"> to be a timepicker
+	$('input[name=time]').timepicker({ 'timeFormat': 'H:i' });
+	
+	// TODO: validate form: name field is required, email field should validate as email, cell field should be a number, date and time are required
+	$.validator.addMethod('time', function(value, element, param) {
+		return value == '' || value.match(/^([01][0-9]|2[0-3]):[0-5][0-9]$/);
+	}, 'Enter a valid time: hh:mm');
+
+	$("#add form[name=addForm]").validate({
+	  rules: {
+		cell: {
+			required: true,
+			number: true
+		},
+		email: {
+			required: true,
+			email: true
+		},
+		time: {
+			required: true, 
+			time: true
+		}
+	  },
+	  submitHandler: function(form) {
+		$(form).ajaxSubmit(options); 
+	  }
+	});
+	 
+	// post-submit callback 
+	function showResponse(responseText, statusText, xhr, $form)  { 
+		if(statusText=="success") {
+			alert(responseText.message); 
+		 } else alert("Something went wrong!"); 
+	} 
+	// TODO: if the form validates, use the jQuery Form Plugin to send the form
+	
+	$('#tabs').tabs();
+});
+</script>
+</body>
+</html>
