@@ -1,9 +1,9 @@
 <?php
     //$host = 'mysql.metropolia.fi';
     $host = 'mysql.metropolia.fi';
-    $dbname = 'lilyg'; // your username
-    $user = 'lilyg'; // your username
-    $pass = 'mahletab'; // your database password
+    $dbname = 'myusername'; // your username
+    $user = 'my username'; // your username
+    $pass = 'my password'; // your database password
 	
    // TODO: get the data from the form by using $_POST
    $data = array();
